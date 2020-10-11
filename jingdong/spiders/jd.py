@@ -2,10 +2,14 @@
 import re
 import urllib.request
 
+import urllib3
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+
+from .. import my_proxies
 from ..items import JingdongItem
+from ..my_proxies import ProxyPool
 
 
 class JdSpider(CrawlSpider):
@@ -17,7 +21,17 @@ class JdSpider(CrawlSpider):
         Rule(LinkExtractor(allow=''), callback='parse_item', follow=True),
     )
 
+    def __init__(self):
+        urllib3.disable_warnings()
+        my_proxy_pool = ProxyPool()
+        my_proxy_pool.main()
+        my_proxies.PROXY = my_proxy_pool.proxy_list
+        print("After filtering, the following {} proxies is useful.".format(len(my_proxy_pool.proxy_list)))
+        for proxy in my_proxy_pool.proxy_list:
+            print(proxy)
+
     def parse_item(self, response):
+        print(my_proxies.PROXY)
         item = JingdongItem()
         good_url = response.url
         pattern = r"item.jd.com/(.*?).html"
