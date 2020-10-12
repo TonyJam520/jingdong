@@ -6,12 +6,18 @@ from scrapy import Request
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from ..items import JingdongItem
+from ..my_proxies import ProxyPool
 
 
 class JdSpider(CrawlSpider):
     name = 'jd'
     allowed_domains = ['jd.com']
     start_urls = ['http://jd.com/']
+
+    def __init__(self):
+        super(JdSpider, self).__init__()
+        my_proxy_pool = ProxyPool()
+        my_proxy_pool.main()
 
     rules = (
         Rule(LinkExtractor(allow=''), callback='parse_item', follow=True),

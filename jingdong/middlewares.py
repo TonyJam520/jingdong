@@ -4,8 +4,13 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import random
 
 from scrapy import signals
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+from .settings import USER_AGENT_LIST
+
+from jingdong import my_proxies
 
 
 class JingdongSpiderMiddleware:
@@ -101,3 +106,18 @@ class JingdongDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class RotateUserAgentMiddleware(UserAgentMiddleware):
+
+    def process_request(self, request, spider):
+        user_agent = random.choice(USER_AGENT_LIST)
+        if user_agent:
+            request.headers.setdefault('User-Agent', user_agent)
+            # print(f"User-Agent:{user_agent}")
+
+
+class MyProxyMiddleware(object):
+
+    def process_request(self, request, spider):
+        request.meta['proxy'] = 'http://' + my_proxies.username + ':' + my_proxies.password + '@' + random.choice(my_proxies.PROXY)
