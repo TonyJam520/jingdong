@@ -11,8 +11,9 @@ import scrapy
 class JingdongItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    name = scrapy.Field()
-    price = scrapy.Field()
+    goods_id = scrapy.Field()
+    goods_name = scrapy.Field()
+    goods_price = scrapy.Field()
     comment_rate = scrapy.Field()
     comment_count = scrapy.Field()
     shop_name = scrapy.Field()

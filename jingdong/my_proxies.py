@@ -8,8 +8,8 @@ from fake_useragent import UserAgent
 
 PROXY = []
 # 这里是快代理私密代理提取ip的账号和密码
-username = "uasername"
-password = "password"
+username = "52051345"
+password = "cud72i77"
 
 
 class ProxyPool(object):
