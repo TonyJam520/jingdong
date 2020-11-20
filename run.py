@@ -1,3 +1,3 @@
 from scrapy import cmdline
 
-cmdline.execute('scrapy crawl jd --nolog'.split())
+cmdline.execute('scrapy crawl jd'.split())

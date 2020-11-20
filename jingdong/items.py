@@ -16,5 +16,9 @@ class JingdongItem(scrapy.Item):
     goods_price = scrapy.Field()
     comment_rate = scrapy.Field()
     comment_count = scrapy.Field()
+
     shop_name = scrapy.Field()
     shop_link = scrapy.Field()
+    shop_goods_score = scrapy.Field()
+    shop_after_sale_service_score = scrapy.Field()
+    shop_logistics_service_score = scrapy.Field()

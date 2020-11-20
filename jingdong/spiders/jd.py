@@ -38,6 +38,25 @@ class JdSpider(CrawlSpider):
             shop_name = response.xpath("//*[@id='crumb-wrap']/div/div[2]/div[2]/div[1]/div/a/text()").extract_first()
             # 店铺链接
             shop_link = 'http:' + response.xpath("//*[@id='crumb-wrap']/div/div[2]/div[2]/div[1]/div/a/@href").extract_first()
+            shop_goods_score = ""
+            shop_after_sale_service_score = ""
+            shop_logistics_service_score = ""
+            try:
+                # 店铺商品总评分
+                shop_goods_score_string = response.xpath("//*[@id='crumb-wrap']/div/div[2]/div[2]/div[6]/div/div/div[1]/a[1]/div[2]/em/text()").extract_first()
+                shop_goods_score_pattern = r".*?(\d+\.\d+).*?"
+                shop_goods_score = re.compile(shop_goods_score_pattern).findall(str(shop_goods_score_string))[0]
+                # 售后服务评分
+                shop_after_sale_service_score_string = response.xpath("//*[@id='crumb-wrap']/div/div[2]/div[2]/div[6]/div/div/div[1]/a[3]/div[2]/em/text()").extract_first()
+                shop_after_sale_service_score_pattern = r".*?(\d+\.\d+).*?"
+                shop_after_sale_service_score = re.compile(shop_after_sale_service_score_pattern).findall(str(shop_after_sale_service_score_string))[0]
+                # 物流服务评分
+                shop_logistics_service_score_string = response.xpath("//*[@id='crumb-wrap']/div/div[2]/div[2]/div[6]/div/div/div[1]/a[2]/div[2]/em/text()").extract_first()
+                shop_logistics_service_score_pattern = r".*?(\d+\.\d+).*?"
+                shop_logistics_service_score = re.compile(shop_logistics_service_score_pattern).findall(str(shop_logistics_service_score_string))[0]
+            except IndexError:
+                pass
+
             comment_rate_url = "https://club.jd.com/comment/productCommentSummaries.action?referenceIds={}&callback=jQuery5233766&_=10141187361".format(
                 goods_id)
             comment_count_url = "https://club.jd.com/comment/productCommentSummaries.action?referenceIds={}&callback=jQuery5233766&_=10141187361".format(
@@ -66,5 +85,9 @@ class JdSpider(CrawlSpider):
             item['comment_count'] = comment_count
             item['shop_name'] = shop_name
             item['shop_link'] = shop_link
+            item['shop_goods_score'] = shop_goods_score
+            item['shop_after_sale_service_score'] = shop_after_sale_service_score
+            item['shop_logistics_service_score'] = shop_logistics_service_score
+
             if goods_id is not None:
                 yield item
